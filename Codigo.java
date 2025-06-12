@@ -22,8 +22,6 @@ class Paciente implements Comparable<Paciente>{
     }
     @Override
     public int compareTo(Paciente otro) {
-        // Ordenar por categoría (mayor prioridad = número más bajo)
-        // Por ejemplo: C1 (más urgente) > C5 (menos urgente)
         return Integer.compare(this.categoria, otro.categoria);
     }
 
@@ -39,7 +37,6 @@ class Paciente implements Comparable<Paciente>{
         return historialCambios.isEmpty() ? "Sin cambios" : historialCambios.pop();
     }
 
-    //no se si son necesario los getters y setters
     public int getCategoria() {
         return categoria;
     }
@@ -104,8 +101,6 @@ class AreaAtencion {
             pacientesHeap.add(p);
         }
     }
-
-
 
     public String getNombre() {
         return nombreArea;
@@ -176,7 +171,6 @@ class Hospital{
     }
 
 }
-
 
 
 class GeneradorPacientes {
@@ -276,7 +270,7 @@ class SimuladorUrgencia {
             case 2 -> espera > 30;
             case 3 -> espera > 90;
             case 4 -> espera > 180;
-            default -> false; // C5 no tiene límite
+            default -> false; 
         };
     }
 
@@ -314,21 +308,19 @@ class HeapSortHospital {
 
 public class Main {
     public static void main(String[] args) {
-        long timestampInicio = 0L; // Simulación desde 00:00 (timestamp base)
+        long timestampInicio = 0L;
         int pacientesPorDia = 144;
-
-        // Crear hospital y generar pacientes
+        
         Hospital hospital = new Hospital();
         List<Paciente> pacientes = GeneradorPacientes.generarPacientes(pacientesPorDia, timestampInicio);
 
-        // Ejecutar simulación
+
         SimuladorUrgencia simulador = new SimuladorUrgencia(hospital, pacientes);
         simulador.simular(pacientesPorDia);
 
-        // Resultados básicos
+
         System.out.println("Pacientes atendidos: " + hospital.getPacientesAtendidos().size());
 
-        // Ejemplo de análisis por categoría
         for (int cat = 1; cat <= 5; cat++) {
             List<Paciente> enEspera = hospital.obtenerPacientesPorCategoria(cat);
             System.out.println("Pacientes en espera categoría C" + cat + ": " + enEspera.size());
